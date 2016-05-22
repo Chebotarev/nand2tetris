@@ -27,8 +27,8 @@
 // if (out < 0) set ng = 1
 
 CHIP ALU {
-    IN  
-        x[16], y[16],  // 16-bit inputs        
+    IN
+        x[16], y[16],  // 16-bit inputs
         zx, // zero the x input?
         nx, // negate the x input?
         zy, // zero the y input?
@@ -36,11 +36,27 @@ CHIP ALU {
         f,  // compute out = x + y (if 1) or x & y (if 0)
         no; // negate the out output?
 
-    OUT 
+    OUT
         out[16], // 16-bit output
         zr, // 1 if (out == 0), 0 otherwise
         ng; // 1 if (out < 0),  0 otherwise
 
     PARTS:
-   // Put you code here:
+    Not(in=zx, out=nzx);
+    And16(a=x, b[0]=nzx, b[1]=nzx, b[2]=nzx, b[3]=nzx, b[4]=nzx, b[5]=nzx,
+    b[6]=nzx, b[7]=nzx, b[8]=nzx, b[9]=nzx, b[10]=nzx, b[11]=nzx, b[12]=nzx,
+    b[13]=nzx, b[14]=nzx, b[15]=nzx, out=x1);
+
+    Xor16(a=x1, b[0]=nx, b[1]=nx, b[2]=nx, b[3]=nx, b[4]=nx, b[5]=nx,
+    b[6]=nx, b[7]=nx, b[8]=nx, b[9]=nx, b[10]=nx, b[11]=nx, b[12]=nx,
+    b[13]=nx, b[14]=nx, b[15]=nx, out=x2);
+
+    Not(in=zy, out=nzy);
+    And16(a=y, b[0]=nzy, b[1]=nzy, b[2]=nzy, b[3]=nzy, b[4]=nzy, b[5]=nzy,
+    b[6]=nzy, b[7]=nzy, b[8]=nzy, b[9]=nzy, b[10]=nzy, b[11]=nzy, b[12]=nzy,
+    b[13]=nzy, b[14]=nzy, b[15]=nzy, out=y1);
+
+    Xor16(a=y1, b[0]=ny, b[1]=ny, b[2]=ny, b[3]=ny, b[4]=ny, b[5]=ny,
+    b[6]=ny, b[7]=ny, b[8]=ny, b[9]=ny, b[10]=ny, b[11]=ny, b[12]=ny,
+    b[13]=ny, b[14]=ny, b[15]=ny, out=y2);
 }
