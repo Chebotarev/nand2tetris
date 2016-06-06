@@ -100,12 +100,32 @@ CHIP ALU {
     b[6]=no, b[7]=no, b[8]=no, b[9]=no, b[10]=no, b[11]=no, b[12]=no,
     b[13]=no, b[14]=no, b[15]=no, out=out3);
 
-    Or16(a=out2, b=out3, out=out);
+    Or16(a=out2, b=out3, out=out, out=finalout, out[15]=finalout15);
 
-    Not16(in=out, out=nout);
-    Or8Way(in[0]=nout[0], in[1]=nout[1],in[2]=nout[2],in[3]=nout[3],in[4]=nout[4],in[5]=nout[5],in[6]=nout[6],in[7]=nout[7],out=orout1);
+    Not16(in=finalout, out[0]=nfinalout0, out[1]=nfinalout1, out[2]=nfinalout2,
+    out[3]=nfinalout3, out[4]=nfinalout4, out[5]=nfinalout5, out[6]=nfinalout6,
+    out[7]=nfinalout7, out[8]=nfinalout8, out[9]=nfinalout9,
+    out[10]=nfinalout10, out[11]=nfinalout11, out[12]=nfinalout12,
+    out[13]=nfinalout13, out[14]=nfinalout14, out[15]=nfinalout15);
 
-    Or8Way(in[8]=nout[8],
-    in[9]=nout[9],in[10]=nout[10],in[11]=nout[11],in[12]=nout[12],in[13]=nout[13],in[14]=nout[14],in[15]=nout[15],out=orout2);
+    And(a=nfinalout0, b=nfinalout1, out=and1);
+    And(a=nfinalout2, b=nfinalout3, out=and2);
+    And(a=nfinalout4, b=nfinalout5, out=and3);
+    And(a=nfinalout6, b=nfinalout7, out=and4);
+    And(a=nfinalout8, b=nfinalout9, out=and5);
+    And(a=nfinalout10, b=nfinalout11, out=and6);
+    And(a=nfinalout12, b=nfinalout13, out=and7);
+    And(a=nfinalout14, b=nfinalout15, out=and8);
 
+    And(a=and1, b=and2, out=and9);
+    And(a=and3, b=and4, out=and10);
+    And(a=and5, b=and6, out=and11);
+    And(a=and7, b=and8, out=and12);
+
+    And(a=and9, b=and10, out=and13);
+    And(a=and11, b=and12, out=and14);
+
+    And(a=and13, b=and14, out=zr);
+
+    And(a=finalout15, b=true, out=ng);
 }
