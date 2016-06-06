@@ -47,16 +47,65 @@ CHIP ALU {
     b[6]=nzx, b[7]=nzx, b[8]=nzx, b[9]=nzx, b[10]=nzx, b[11]=nzx, b[12]=nzx,
     b[13]=nzx, b[14]=nzx, b[15]=nzx, out=x1);
 
-    Xor16(a=x1, b[0]=nx, b[1]=nx, b[2]=nx, b[3]=nx, b[4]=nx, b[5]=nx,
+    Not16(in[0]=nx, in[1]=nx, in[2]=nx, in[3]=nx, in[4]=nx, in[5]=nx, in[6]=nx,
+    in[7]=nx, in[8]=nx, in[9]=nx, in[10]=nx, in[11]=nx, in[12]=nx, in[13]=nx,
+    in[14]=nx,in[15]=nx, out=nnx);
+    And16(a=x1, b=nnx, out=x2);
+
+    Not16(in=x1, out=nx1);
+    And16(a=nx1, b[0]=nx, b[1]=nx, b[2]=nx, b[3]=nx, b[4]=nx, b[5]=nx,
     b[6]=nx, b[7]=nx, b[8]=nx, b[9]=nx, b[10]=nx, b[11]=nx, b[12]=nx,
-    b[13]=nx, b[14]=nx, b[15]=nx, out=x2);
+    b[13]=nx, b[14]=nx, b[15]=nx, out=x3);
+
+    Or16(a=x2, b=x3, out=x4);
 
     Not(in=zy, out=nzy);
     And16(a=y, b[0]=nzy, b[1]=nzy, b[2]=nzy, b[3]=nzy, b[4]=nzy, b[5]=nzy,
     b[6]=nzy, b[7]=nzy, b[8]=nzy, b[9]=nzy, b[10]=nzy, b[11]=nzy, b[12]=nzy,
     b[13]=nzy, b[14]=nzy, b[15]=nzy, out=y1);
 
-    Xor16(a=y1, b[0]=ny, b[1]=ny, b[2]=ny, b[3]=ny, b[4]=ny, b[5]=ny,
+    Not16(in[0]=ny, in[1]=ny, in[2]=ny, in[3]=ny, in[4]=ny, in[5]=ny, in[6]=ny,
+    in[7]=ny, in[8]=ny, in[9]=ny, in[10]=ny, in[11]=ny, in[12]=ny, in[13]=ny,
+    in[14]=ny,in[15]=ny, out=nny);
+    And16(a=y1, b=nny, out=y2);
+
+    Not16(in=y1, out=ny1);
+    And16(a=ny1, b[0]=ny, b[1]=ny, b[2]=ny, b[3]=ny, b[4]=ny, b[5]=ny,
     b[6]=ny, b[7]=ny, b[8]=ny, b[9]=ny, b[10]=ny, b[11]=ny, b[12]=ny,
-    b[13]=ny, b[14]=ny, b[15]=ny, out=y2);
+    b[13]=ny, b[14]=ny, b[15]=ny, out=y3);
+
+    Or16(a=y2, b=y3, out=y4);
+
+    Add16(a=x4, b=y4, out=xplusy);
+    And16(a=x4, b=y4, out=xandy);
+
+    And16(a=xplusy, b[0]=f, b[1]=f, b[2]=f, b[3]=f, b[4]=f, b[5]=f,
+    b[6]=f, b[7]=f, b[8]=f, b[9]=f, b[10]=f, b[11]=f, b[12]=f,
+    b[13]=f, b[14]=f, b[15]=f, out=fxplusy);
+
+    Not16(in[0]=f, in[1]=f, in[2]=f, in[3]=f, in[4]=f, in[5]=f, in[6]=f,
+    in[7]=f, in[8]=f, in[9]=f, in[10]=f, in[11]=f, in[12]=f, in[13]=f, in[14]=f,
+    in[15]=f, out=nf);
+    And16(a=xandy, b=nf, out=fxandy);
+
+    Or16(a=fxplusy, b=fxandy, out=out1);
+
+    Not(in=no, out=nno);
+    And16(a=out1, b[0]=nno, b[1]=nno, b[2]=nno, b[3]=nno, b[4]=nno, b[5]=nno,
+    b[6]=nno, b[7]=nno, b[8]=nno, b[9]=nno, b[10]=nno, b[11]=nno, b[12]=nno,
+    b[13]=nno, b[14]=nno, b[15]=nno, out=out2);
+
+    Not16(in=out1, out=nout1);
+    And16(a=nout1, b[0]=no, b[1]=no, b[2]=no, b[3]=no, b[4]=no, b[5]=no,
+    b[6]=no, b[7]=no, b[8]=no, b[9]=no, b[10]=no, b[11]=no, b[12]=no,
+    b[13]=no, b[14]=no, b[15]=no, out=out3);
+
+    Or16(a=out2, b=out3, out=out);
+
+    Not16(in=out, out=nout);
+    Or8Way(in[0]=nout[0], in[1]=nout[1],in[2]=nout[2],in[3]=nout[3],in[4]=nout[4],in[5]=nout[5],in[6]=nout[6],in[7]=nout[7],out=orout1);
+
+    Or8Way(in[8]=nout[8],
+    in[9]=nout[9],in[10]=nout[10],in[11]=nout[11],in[12]=nout[12],in[13]=nout[13],in[14]=nout[14],in[15]=nout[15],out=orout2);
+
 }
